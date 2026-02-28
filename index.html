@@ -1,0 +1,134 @@
+<!DOCTYPE html> <!-- HTML5 Dokumenttyp -->
+
+<html lang="de"> <!-- Sprache Deutsch -->
+
+<head>
+    <meta charset="UTF-8"> <!-- Zeichencodierung -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive -->
+    <title>Meine Website</title> <!-- Browser Titel -->
+
+    <style> /* CSS Start */
+
+        body {
+            margin: 0; /* Entfernt Standardabstände */
+            font-family: Arial, sans-serif; /* Schrift */
+            background-color: #000; /* Schwarzes Theme */
+            color: white; /* Weiße Schrift */
+            overflow-x: hidden; /* Kein horizontales Scrollen */
+        }
+
+        canvas {
+            position: fixed; /* Hintergrund fixieren */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Hinter Inhalt */
+        }
+
+        .container {
+            height: 100vh; /* Volle Bildschirmhöhe */
+            display: flex; /* Flexbox */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        footer {
+            background: #111;
+            padding: 20px;
+            text-align: center;
+        }
+
+        footer a {
+            color: #00bfff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <canvas id="particles"></canvas> <!-- Animierter Hintergrund -->
+
+    <div class="container">
+        <h1>Willkommen!</h1>
+        <p>Diese Website befindet sich aktuell im Aufbau.</p>
+    </div>
+
+    <footer>
+        <!-- WICHTIG: Link zum Impressum -->
+        <a href="impressum.html">Impressum</a>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById("particles");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = "white";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 120; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        init();
+        animate();
+    </script>
+
+</body>
+</html>
